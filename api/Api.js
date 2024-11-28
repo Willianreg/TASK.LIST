@@ -1,18 +1,18 @@
-const BASE_URL = 'http://localhost:5229/api/Tasks'
+const BASE_URL = 'http://localhost:5529/api/TasksControllers';
 
-export const getRequest = async() => {
+export const getRequest = async () => {
     try {
-        //?EXECUTA
-
+        // EXECUTA
         const response = await fetch(BASE_URL, {
             method: "GET",
             headers: {
-                'Content-Type' : 'application/json'
+                'Content-Type': 'application/json'
             }
         });
 
-        if (!response.ok){
-            throw new Error(`GET request failed with status ${response.status}`);
+        console.log(response)
+        if (!response.ok) {
+            throw new Error(`GET resquest failed with status ${response.status}`)
         }
 
         const textData = await response.text();
@@ -20,11 +20,57 @@ export const getRequest = async() => {
 
         return data;
 
-
-    } catch (error) {
+    }
+    catch (error) {
+        // TRATATIVA DO ERRO
         console.error(error)
         throw error;
-        //!TRATATIVA DO ERRO
     }
-    
+}
+export const postRequest = async (title, desc) => {
+    try {
+        let myBody = {
+            id: 0,
+            title: title,
+            desc: desc
+        };
+
+        const response = await fetch(BASE_URL, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(myBody),
+        });
+
+        if (!response.ok) {
+            throw new Error("Post request failed!")
+        }
+
+        const textData = await response.text();
+        return JSON.parse(textData);
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const deleteRequest = async (id) => {
+    try{
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "text-plain",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Delete request failed!");
+    }
+} catch (error) {
+    console.error(error);
+    throw error;
+}
+
 }
